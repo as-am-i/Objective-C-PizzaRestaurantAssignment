@@ -20,12 +20,12 @@
 }
 
 + (Pizza *) largePepperoni{
-    NSArray *toppings = [[NSArray new] initWithObjects:@"pepperoni", nil];
+    NSArray *toppings = [[NSArray alloc] initWithObjects:@"pepperoni", nil];
     Pizza *largePepperoni = [[Pizza alloc] initWithSize:large andToppings:toppings];
     return largePepperoni;
 }
 + (Pizza *) hawaiianWithSize:(PizzaSize)size{
-    NSArray *toppings = [[NSArray new] initWithObjects:@"pineapple", @"bacon", nil];
+    NSArray *toppings = [[NSArray alloc] initWithObjects:@"pineapple", @"bacon", nil];
     Pizza *hawaiian = [[Pizza alloc] initWithSize:size andToppings:toppings];
     return hawaiian;
 }

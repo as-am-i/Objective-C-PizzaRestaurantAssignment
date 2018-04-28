@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 #import "Kitchen.h"
+#import "Manager.h"
+#import "SecondManager.h"
+#import "ThirdManager.h"
 
 int main(int argc, const char * argv[])
 {
@@ -18,6 +21,9 @@ int main(int argc, const char * argv[])
         NSLog(@"Please pick your pizza size and toppings:");
         
         Kitchen *restaurantKitchen = [Kitchen new];
+        Manager *anchoviesHater = [Manager new];
+        SecondManager *pizzaLover = [SecondManager new];
+        ThirdManager *normalManager = [ThirdManager new];
         
         while (TRUE) {
             // Loop forever
@@ -36,14 +42,40 @@ int main(int argc, const char * argv[])
             
             // And then send some message to the kitchen...
             NSString *first = commandWords[0];
-            NSString *second = commandWords[1];
+            NSString *second;
+            if ([commandWords count] > 1) {
+                second = commandWords[1];
+            }
             PizzaSize size;
             
-            if ([commandWords count] == 1 && [first isEqualToString:@"pepperoni"]) {
-                [restaurantKitchen makelargePepperoni];
+            if ([commandWords count] == 2 && [first isEqualToString:@"call"]) {
+                if ([second isEqualToString:@"Asami"] || [second isEqualToString:@"asami"]) {
+                    [restaurantKitchen setDelegate:anchoviesHater];
+                    NSLog(@"Asami called");
+                    continue;
+                } else if ([second isEqualToString:@"Jesus"] || [second isEqualToString:@"jesus"]) {
+                    [restaurantKitchen setDelegate:pizzaLover];
+                    continue;
+                } else if ([second isEqualToString:@"Nobody"] || [second isEqualToString:@"nobody"]) {
+                    [restaurantKitchen setDelegate:normalManager];
+                    continue;
+                }
+            } else if ([commandWords count] == 1 && [first isEqualToString:@"pepperoni"]) {
+                if ([restaurantKitchen makelargePepperoni]) {
+                    NSLog(@"Here is your pizza: Pepperoni");
+                }
+                
             } else if ([commandWords count] == 2 && [second isEqualToString:@"hawaiian"]) {
                 size = [restaurantKitchen getSizeOfPizza:first];
-                [restaurantKitchen makeHawaiianWithSize:size];
+                if ([restaurantKitchen makeHawaiianWithSize:size]) {
+                    NSLog(@"Here is your pizza: Hawaiian");
+                }
+            } else if ([commandWords count] == 1 && [first isEqualToString:@"wine"]) {
+                NSLog(@"You can get drunk tonight🍷");
+                continue;
+            } else if ([commandWords count] == 1 && ([first isEqualToString:@"coke"] || [first isEqualToString:@"pepsi"])) {
+                NSLog(@"Enjoy 🍾 with pizza!");
+                continue;
             } else {
                 size = [restaurantKitchen getSizeOfPizza:first];
                 
@@ -51,7 +83,9 @@ int main(int argc, const char * argv[])
                 [mutableCommandWords removeObjectAtIndex:0];
                 NSArray *toppings = [mutableCommandWords copy];
                 
-                [restaurantKitchen makePizzaWithSize:size toppings:toppings];
+                if ([restaurantKitchen makePizzaWithSize:size toppings:toppings]) {
+                    NSLog(@"Here is your pizza: Custome one");
+                }
             }
         }
 
