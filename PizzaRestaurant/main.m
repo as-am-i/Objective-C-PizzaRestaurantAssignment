@@ -88,7 +88,13 @@ int main(int argc, const char * argv[])
                 NSArray *toppings = [mutableCommandWords copy];
                 
                 if ([restaurantKitchen makePizzaWithSize:size toppings:toppings]) {
-                    NSLog(@"Here is your pizza: Custome one");
+                    if (restaurantKitchen.delegate == normalManager || restaurantKitchen.delegate == anchoviesHater) {
+                        NSLog(@"Here is your pizza: Custome one");
+                    } else if (restaurantKitchen.delegate == pizzaLover) {
+                        NSLog(@"Here is your pizza: Large one");
+                    }
+                } else {
+                    NSLog(@"Woops! Someone declined your order!");
                 }
             }
         }
