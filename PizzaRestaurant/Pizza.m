@@ -30,4 +30,19 @@
     return hawaiian;
 }
 
+- (NSString *) printAllToppings:(Pizza *) pizza{
+    NSString *stringPieces = @"";
+    NSString *stringToPrint = @"";
+    for (NSString *topping in [pizza toppings]) {
+        if ([topping isEqualTo:[pizza toppings].lastObject]) {
+            stringPieces = [NSString stringWithFormat:@"%@", topping];
+        } else {
+            stringPieces = [NSString stringWithFormat:@"%@, ", topping];
+        }
+        stringToPrint = [stringToPrint stringByAppendingString:stringPieces];
+    }
+    
+    return stringToPrint;
+}
+
 @end

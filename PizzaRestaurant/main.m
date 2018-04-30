@@ -13,6 +13,8 @@
 #import "SecondManager.h"
 #import "ThirdManager.h"
 
+#import "InputCollector.h"
+
 int main(int argc, const char * argv[])
 {
 
@@ -87,11 +89,15 @@ int main(int argc, const char * argv[])
                 [mutableCommandWords removeObjectAtIndex:0];
                 NSArray *toppings = [mutableCommandWords copy];
                 
-                if ([restaurantKitchen makePizzaWithSize:size toppings:toppings]) {
+                Pizza *newPizza = [restaurantKitchen makePizzaWithSize:size toppings:toppings];
+                if (newPizza) {
                     if (restaurantKitchen.delegate == normalManager || restaurantKitchen.delegate == anchoviesHater) {
                         NSLog(@"Here is your pizza: Custome one");
+                        [InputCollector printToPrompt:[newPizza printAllToppings:newPizza]];
+                        
                     } else if (restaurantKitchen.delegate == pizzaLover) {
                         NSLog(@"Here is your pizza: Large one");
+                        [InputCollector printToPrompt:[newPizza printAllToppings:newPizza]];
                     }
                 } else {
                     NSLog(@"Woops! Someone declined your order!");
