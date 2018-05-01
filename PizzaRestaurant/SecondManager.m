@@ -20,6 +20,7 @@
 
 - (void) kitchenDidMakePizza:(Pizza *)pizza{
     NSLog(@"Pizza is one of the perfect foods in the world, yeah?");
+    [self.delegate deliverPizza:pizza];
 }
 
 @end

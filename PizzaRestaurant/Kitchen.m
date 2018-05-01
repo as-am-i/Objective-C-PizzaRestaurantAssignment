@@ -27,11 +27,22 @@
 }
 
 - (Pizza *) makelargePepperoni{
-    return [Pizza largePepperoni];
+    Pizza *newPizza = [Pizza largePepperoni];
+    
+    if ([self.delegate respondsToSelector:@selector(kitchenDidMakePizza:)]) {
+        [self.delegate kitchenDidMakePizza:newPizza];
+    }
+    return newPizza;
 }
 
 - (Pizza *) makeHawaiianWithSize:(PizzaSize)size{
-    return [Pizza hawaiianWithSize:size];
+    Pizza *newPizza = [Pizza hawaiianWithSize:size];
+    
+    if ([self.delegate respondsToSelector:@selector(kitchenDidMakePizza:)]) {
+        [self.delegate kitchenDidMakePizza:newPizza];
+    }
+    
+    return newPizza;
 }
 
 - (PizzaSize) getSizeOfPizza:(NSString *)input{

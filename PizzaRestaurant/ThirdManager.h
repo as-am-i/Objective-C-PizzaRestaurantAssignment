@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Kitchen.h"
+#import "Manager.h"
 
 @interface ThirdManager : NSObject <KitchenDelegate>
+
+// delegate property
+@property (weak) id <ManagerDelegate> delegate;
 
 @end

@@ -24,4 +24,8 @@
     return NO;
 }
 
+- (void) kitchenDidMakePizza:(Pizza *)pizza{
+    [self.delegate deliverPizza:pizza];
+}
+
 @end

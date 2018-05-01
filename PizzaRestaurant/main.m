@@ -12,6 +12,8 @@
 #import "Manager.h"
 #import "SecondManager.h"
 #import "ThirdManager.h"
+#import "DeliveryService.h"
+#import "DeliveryCar.h"
 
 #import "InputCollector.h"
 
@@ -26,6 +28,8 @@ int main(int argc, const char * argv[])
         Manager *anchoviesHater = [Manager new];
         SecondManager *pizzaLover = [SecondManager new];
         ThirdManager *normalManager = [ThirdManager new];
+        DeliveryService *deliveryService = [DeliveryService new];
+        DeliveryCar *deliverCar = [DeliveryCar new];
         
         while (TRUE) {
             // Loop forever
@@ -53,24 +57,16 @@ int main(int argc, const char * argv[])
             if ([commandWords count] == 2 && [first isEqualToString:@"call"]) {
                 if ([second isEqualToString:@"Asami"] || [second isEqualToString:@"asami"]) {
                     [restaurantKitchen setDelegate:anchoviesHater];
-                    continue;
+                    [anchoviesHater setDelegate:deliveryService];
                 } else if ([second isEqualToString:@"Jesus"] || [second isEqualToString:@"jesus"]) {
                     [restaurantKitchen setDelegate:pizzaLover];
-                    continue;
+                    [pizzaLover setDelegate:deliveryService];
                 } else if ([second isEqualToString:@"Nobody"] || [second isEqualToString:@"nobody"]) {
                     [restaurantKitchen setDelegate:normalManager];
-                    continue;
+                    [normalManager setDelegate:deliveryService];
                 }
-            } else if ([commandWords count] == 1 && [first isEqualToString:@"pepperoni"]) {
-                if ([restaurantKitchen makelargePepperoni]) {
-                    NSLog(@"Here is your pizza: Pepperoni");
-                }
-                
-            } else if ([commandWords count] == 2 && [second isEqualToString:@"hawaiian"]) {
-                size = [restaurantKitchen getSizeOfPizza:first];
-                if ([restaurantKitchen makeHawaiianWithSize:size]) {
-                    NSLog(@"Here is your pizza: Hawaiian");
-                }
+                [deliveryService setDelegate:deliverCar];
+                continue;
             } else if ([commandWords count] == 1 && [first isEqualToString:@"wine"]) {
                 NSLog(@"You can get drunk tonight🍷");
                 continue;
@@ -81,23 +77,29 @@ int main(int argc, const char * argv[])
                 // when user haven't called any manager
                 if (restaurantKitchen.delegate == nil) {
                     [restaurantKitchen setDelegate:normalManager];
+                    [normalManager setDelegate:deliveryService];
+                    [deliveryService setDelegate:deliverCar];
                 }
                 
-                size = [restaurantKitchen getSizeOfPizza:first];
+                Pizza *newPizza;
+                if ([commandWords count] == 1 && [first isEqualToString:@"pepperoni"]) {
+                    newPizza = [restaurantKitchen makelargePepperoni];
+                } else if ([commandWords count] == 2 && [second isEqualToString:@"hawaiian"]) {
+                    size = [restaurantKitchen getSizeOfPizza:first];
+                    newPizza = [restaurantKitchen makeHawaiianWithSize:size];
+                } else {
+                    size = [restaurantKitchen getSizeOfPizza:first];
+                    
+                    NSMutableArray *mutableCommandWords = [NSMutableArray arrayWithArray:commandWords];
+                    [mutableCommandWords removeObjectAtIndex:0];
+                    NSArray *toppings = [mutableCommandWords copy];
+                    
+                    newPizza = [restaurantKitchen makePizzaWithSize:size toppings:toppings];
+                }
                 
-                NSMutableArray *mutableCommandWords = [NSMutableArray arrayWithArray:commandWords];
-                [mutableCommandWords removeObjectAtIndex:0];
-                NSArray *toppings = [mutableCommandWords copy];
-                
-                Pizza *newPizza = [restaurantKitchen makePizzaWithSize:size toppings:toppings];
                 if (newPizza) {
-                    if (restaurantKitchen.delegate == normalManager || restaurantKitchen.delegate == anchoviesHater) {
-                        NSLog(@"Here is your pizza: Custome one");
-                        [InputCollector printToPrompt:[newPizza printAllToppings:newPizza]];
-                        
-                    } else if (restaurantKitchen.delegate == pizzaLover) {
-                        NSLog(@"Here is your pizza: Large one");
-                        [InputCollector printToPrompt:[newPizza printAllToppings:newPizza]];
+                    for (NSString *detail in [deliveryService history]) {
+                        [InputCollector printToPrompt:detail];
                     }
                 } else {
                     NSLog(@"Woops! Someone declined your order!");

@@ -30,7 +30,13 @@
     return hawaiian;
 }
 
-- (NSString *) printAllToppings:(Pizza *) pizza{
+- (NSString *) detailPizza:(Pizza *)pizza{
+    NSString *detailTopping = [pizza allToppings:pizza];
+    NSString *detailSize = [pizza pizzaSize:pizza];
+    return [NSString stringWithFormat:@"Size: %@,\nToppings: %@", detailSize, detailTopping];
+}
+
+- (NSString *) allToppings:(Pizza *)pizza{
     NSString *stringPieces = @"";
     NSString *stringToPrint = @"";
     for (NSString *topping in [pizza toppings]) {
@@ -41,8 +47,24 @@
         }
         stringToPrint = [stringToPrint stringByAppendingString:stringPieces];
     }
-    
     return stringToPrint;
 }
 
+- (NSString *) pizzaSize:(Pizza *)pizza{
+    NSString *size = @"";
+    switch ([pizza size]) {
+        case 0:
+            size = @"small";
+            break;
+        case 1:
+            size = @"medium";
+            break;
+        case 2:
+            size = @"large";
+            break;
+        default:
+            break;
+    }
+    return size;
+}
 @end

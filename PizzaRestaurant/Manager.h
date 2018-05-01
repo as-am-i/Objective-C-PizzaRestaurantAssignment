@@ -9,6 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "Kitchen.h"
 
+
+@protocol ManagerDelegate <NSObject>
+- (void) deliverPizza:(Pizza *)pizza;
+@end
+
 @interface Manager : NSObject <KitchenDelegate>
+
+// delegate property
+@property (weak) id <ManagerDelegate> delegate;
 
 @end

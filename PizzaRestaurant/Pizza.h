@@ -23,6 +23,8 @@ typedef NS_ENUM (NSUInteger, PizzaSize) {
 + (Pizza *) largePepperoni;
 + (Pizza *) hawaiianWithSize:(PizzaSize)size;
 
-- (NSString *) printAllToppings:(Pizza *) pizza;
+- (NSString *) detailPizza:(Pizza *)pizza;
+- (NSString *) allToppings:(Pizza *)pizza;
+- (NSString *) pizzaSize:(Pizza *)pizza;
 
 @end
